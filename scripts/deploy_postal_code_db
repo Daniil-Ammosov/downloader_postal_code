@@ -1,0 +1,42 @@
+#!/usr/bin/python2
+# coding: utf-8
+
+from alembic import command
+from alembic.config import Config
+import sqlalchemy
+
+from downloader_postal_code.db import CONNECT_STR, CONNECT_STR_WITHOUT_DB, CREATE_DB_QUERY, SHOW_DB_QUERY
+from downloader_postal_code.utils import read_config
+
+
+if __name__ == "__main__":
+    config = read_config()
+
+    # Проверяем наличие бд "postal_code"
+    url_for_create_db = CONNECT_STR_WITHOUT_DB.format(
+        host=config["mysql"]["host"],
+        password=config["mysql"]["password"],
+        login=config["mysql"]["login"]
+    )
+    engine_for_creating_db = sqlalchemy.create_engine(url_for_create_db)
+
+    existing_databases = engine_for_creating_db.execute(SHOW_DB_QUERY)
+    existing_databases = [db[0] for db in existing_databases]
+
+    if config["mysql"]["database"] not in existing_databases:
+
+        # Создаём бд "postal_code"
+        engine_for_creating_db.execute(CREATE_DB_QUERY.format(config["mysql"]["database"]))
+        print "\nCreated database '{0}'\n".format(config["mysql"]["database"])
+
+    # Запускаем миграцию -> создаст таблицы addr_objects и house_object
+    url = CONNECT_STR.format(
+        host=config["mysql"]["host"],
+        password=config["mysql"]["password"],
+        login=config["mysql"]["login"],
+        database=config["mysql"]["database"]
+    )
+    alembic_cfg = Config("/etc/downloader_postal_code/downloader_postal_code.ini")
+    alembic_cfg.set_main_option("sqlalchemy.url", url)
+
+    command.upgrade(alembic_cfg, "head")

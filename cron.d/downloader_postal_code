@@ -1,0 +1,1 @@
+#0 0 * * * user /usr/bin/flock /var/lock/download_postal_code download_postal_code

@@ -1,0 +1,34 @@
+{
+  "unzip": {
+    "tmp_folder": "/srv/downloader_postal_code/tmp",
+    "src_folder": "/srv/downloader_postal_code/src",
+    "max_part_size": 1,
+
+    "xml_start_names": [
+      "as_addrobj",
+      "as_house"
+    ]
+  },
+
+  "download": {
+    "url": "http://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo",
+    "method": "FiasCompleteXmlUrl",
+    "quantity_attempts": 5,
+    "timeout": 30
+  },
+
+  "mysql": {
+    "host": "localhost",
+    "login": "login",
+    "password": "password",
+    "database": "postal_indexes"
+  },
+
+  "log_lvl": "info",
+  "max_part_size": 1,
+
+  "attempt_quantity": 5,
+  "timeout": 60,
+  "time_between_attempt": 30
+
+}

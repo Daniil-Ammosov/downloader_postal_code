@@ -1,0 +1,20 @@
+#!/bin/sh
+
+FIAS_DIR=/srv/downloader_postal_code
+mkdir -p ${FIAS_DIR}/src
+mkdir -p ${FIAS_DIR}/tmp
+
+chown user:user ${FIAS_DIR}/src
+chown user:user ${FIAS_DIR}/tmp
+
+chmod 755 ${FIAS_DIR}/src
+chmod 755 ${FIAS_DIR}/tmp
+
+LOG_DIR=/var/log/downloader_postal_code
+mkdir -p $LOG_DIR
+chown user:user $LOG_DIR
+chmod 755 $LOG_DIR
+
+touch ${LOG_DIR}/log
+chown user:user ${LOG_DIR}/log
+chmod 664 ${LOG_DIR}/log
